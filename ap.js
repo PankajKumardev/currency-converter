@@ -30,19 +30,25 @@ const updateFlag = (element) =>{
     img.src = newsrc;
 };
 
-btn.addEventListener("click", async (evt)=>{
+btn.addEventListener("click",(evt)=>{
     evt.preventDefault();
-    let amount = document.querySelector(".amount input");
-    let amtval = amount.value;
-    if(amtval=== "" || amtval < 1){
-        amtval =1;
-        amount.value = 1;
-    } 
-    const URL = `${BASE_URL}/${fromCurr.value.toLowerCase()}/${toCurr.value.toLowerCase()}.json`
-    let response = await fetch(URL);
-    let data = await response.json();
-    let rate = data[toCurr.value.toLowerCase()]
-    let finalamount = amtval * rate;
-    msg.innerText = `${amtval} ${fromCurr.value} = ${finalamount} ${toCurr.value}`;
+    updateExchangeRate();
 });
 
+const updateExchangeRate = async ()=>{
+  let amount = document.querySelector(".amount input");
+  let amtval = amount.value;
+  if(amtval=== "" || amtval < 1){
+      amtval =1;
+      amount.value = 1;
+  } 
+  const URL = `${BASE_URL}/${fromCurr.value.toLowerCase()}/${toCurr.value.toLowerCase()}.json`
+  let response = await fetch(URL);
+  let data = await response.json();
+  let rate = data[toCurr.value.toLowerCase()]
+  let finalamount = amtval * rate;
+  msg.innerText = `${amtval} ${fromCurr.value} = ${finalamount} ${toCurr.value}`;
+}
+window.addEventListener("load",()=>{
+  updateExchangeRate();
+})
